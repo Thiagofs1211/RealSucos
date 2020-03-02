@@ -28,7 +28,7 @@ public class Cliente {
 	
 	private String endereco;
 	
-	//private Date dataCadastro;
+	private Date dataCadastro;
 	
 	@Column(name = "COMERCIO")
 	private String comercio;

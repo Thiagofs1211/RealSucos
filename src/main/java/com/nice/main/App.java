@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
-//@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 @ComponentScan(basePackageClasses = App.class)
+@EnableAutoConfiguration(exclude={DataSourceAutoConfiguration.class})
 public class App {
     public static void main( String[] args ) {
     	SpringApplication.run(App.class, args);

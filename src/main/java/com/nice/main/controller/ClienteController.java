@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -25,14 +26,11 @@ public class ClienteController {
 	
 	ClienteService service = new ClienteService();
 	
+	@CrossOrigin(origins = "*")
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
 	public List<Cliente> listar(){
 		List<Cliente> clientes = service.listarClientes();
-		
-//		for(Cliente c : clientes) {
-		//c.setDataCadastro(null);
-//		}
 		
 		if(clientes == null || clientes.isEmpty()) {
 			return null;
@@ -41,7 +39,8 @@ public class ClienteController {
 		return clientes;
 	}
 	
-	@GetMapping("/buscar/{id}")
+	@CrossOrigin(origins = "*")
+	@GetMapping("/buscar/id/{id}")
 	public ResponseEntity<Cliente> procurarClienteID(@PathVariable int id){
 		Cliente cliente = service.procurarCliente(id);
 		
@@ -52,6 +51,7 @@ public class ClienteController {
 		return new ResponseEntity<Cliente>(cliente, HttpStatus.OK);
 	}
 
+	@CrossOrigin(origins = "*")
 	@GetMapping("/buscar/{nome}")
 	public ResponseEntity<List<Cliente>> procurarClienteNome(@PathVariable String nome){
 		List<Cliente> clientes = service.procurarClienteNomeLike(nome);
@@ -63,6 +63,7 @@ public class ClienteController {
 		return new ResponseEntity<List<Cliente>>(clientes, HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "*")
 	@PostMapping("/cadastro")
 	public ResponseEntity<Cliente> cadastrarCliente( @Valid @RequestBody Cliente newCliente){
 		Cliente cliente = service.cadastrarCliente(newCliente);
@@ -74,6 +75,7 @@ public class ClienteController {
 		return  new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "*")
 	@DeleteMapping("/deletar/{nome}")
 	public ResponseEntity<Object> removerCliente(@PathVariable String nome){
 		Cliente cliente = service.procurarClienteNome(nome);
@@ -86,6 +88,7 @@ public class ClienteController {
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	
+	@CrossOrigin(origins = "*")
 	@PutMapping("/alterar")
 	public ResponseEntity<Object> alterarCliente(@Valid @RequestBody Cliente cliente){
 		Cliente oldCliente = service.procurarCliente(cliente.getIdCliente());
