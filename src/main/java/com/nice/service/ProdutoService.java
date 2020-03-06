@@ -64,8 +64,10 @@ public class ProdutoService {
 	 */
 	public List<Produto> listarProdutosAvulsos(){
 		List<Produto> produtos = null;
+		EntityManagerFactory entityManagerFactory2 = Persistence.createEntityManagerFactory("Clientes-PU");
+		EntityManager entityManager2 = entityManagerFactory2.createEntityManager();
 		String jpql = "select p from Produto p where p.comercio = :comercio";
-		TypedQuery<Produto> typedQuery = entityManager.createQuery(jpql, Produto.class);
+		TypedQuery<Produto> typedQuery = entityManager2.createQuery(jpql, Produto.class);
 		typedQuery.setParameter("comercio", "N");
 		try {
 			produtos = typedQuery.getResultList();
@@ -101,7 +103,9 @@ public class ProdutoService {
 	 */
 	public void cadastrarProduto(Produto produto) {
 		produto.setIdProduto(recuperaProximoID());
-		entityManager.getTransaction().begin();
+		if(!entityManager.getTransaction().isActive()) {
+			entityManager.getTransaction().begin();
+		}
 		entityManager.persist(produto);
 		entityManager.getTransaction().commit();
 	}
@@ -111,9 +115,18 @@ public class ProdutoService {
 	 * @return Integer
 	 */
 	public Integer recuperaProximoID() {
+		Integer id = 1;
 		String jpql = "select MAX(p.id) + 1 from Produto p";
 		TypedQuery<Integer> typedQuery = entityManager.createQuery(jpql, Integer.class);
-		return typedQuery.getSingleResult();
+		try {
+			id = typedQuery.getSingleResult();
+		} catch (NoResultException e) {
+			return 1;
+		}
+		if(id == null) {
+			return 1;
+		}
+		return id;
 	}
 	
 	/**

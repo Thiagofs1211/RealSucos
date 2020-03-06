@@ -30,7 +30,6 @@ public class Cliente {
 	
 	private Date dataCadastro;
 	
-	@Column(name = "COMERCIO")
 	private String comercio;
 
 }

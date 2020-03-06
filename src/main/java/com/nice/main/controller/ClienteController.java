@@ -76,15 +76,15 @@ public class ClienteController {
 	}
 	
 	@CrossOrigin(origins = "*")
-	@DeleteMapping("/deletar/{nome}")
-	public ResponseEntity<Object> removerCliente(@PathVariable String nome){
-		Cliente cliente = service.procurarClienteNome(nome);
+	@DeleteMapping("/deletar")
+	public ResponseEntity<Object> removerCliente(@Valid @RequestBody Cliente cliente){
+		Cliente oldcliente = service.procurarCliente(cliente.getIdCliente());
 		
-		if(cliente == null) {
+		if(oldcliente == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		service.removerCliente(cliente);
+		service.removerCliente(oldcliente);
 		return new ResponseEntity<>(HttpStatus.OK);
 	}
 	

@@ -1,5 +1,6 @@
 package com.nice.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -103,7 +104,7 @@ public class ClienteService {
 	 * @return Cliente
 	 */
 	public Cliente cadastrarCliente(Cliente cliente) {
-		//cliente.setDataCadastro(new Date(Calendar.getInstance().getTime().getTime()));
+		cliente.setDataCadastro(new Date());
 		cliente.setIdCliente(recuperaProximoID());
 		entityManager.getTransaction().begin();
 		entityManager.persist(cliente);
@@ -128,9 +129,14 @@ public class ClienteService {
 	 * @return Integer
 	 */
 	public Integer recuperaProximoID() {
+		Integer id;
 		String jpql = "select MAX(c.id) + 1 from Cliente c";
 		TypedQuery<Integer> typedQuery = entityManager.createQuery(jpql, Integer.class);
-		return typedQuery.getSingleResult();
+		id =  typedQuery.getSingleResult();
+		if(id == null) {
+			return 1;
+		}
+		return id;
 	}
 	
 	/**

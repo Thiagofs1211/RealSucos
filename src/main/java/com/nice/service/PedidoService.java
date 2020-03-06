@@ -1,6 +1,6 @@
 package com.nice.service;
 
-import java.sql.Date;
+import java.util.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +30,7 @@ public class PedidoService {
 	
 	public void inserirPedido(List<ItemPedido> itensPedido, Pedido pedido) {
 		pedido.setIdPedido(recuperarProximoPedidoId());
+		pedido.setDataPedido(new Date());
 		
 		//Inserindo o pedido
 		entityManager.getTransaction().begin();
@@ -84,14 +85,16 @@ public class PedidoService {
 	
 	/**
 	 * Método para listar os pedidos de acordo com um cliente
-	 * @param idCliente the id do cliente
+	 * @param filtro the filtro
 	 * @return List<PedidoData>
 	 */
-	public List<PedidoData> listarPedidosCliente(int idCliente){
+	public List<PedidoData> listarPedidosCliente(int idCliente, Date dataInicio, Date dataFim){
 		List<Pedido> pedidosAux = null;
-		String jpql = "select p from Pedido p where p.cliente.idCliente = :idCliente";
+		String jpql = "select p from Pedido p where p.cliente.idCliente = :idCliente and p.dataPedido BETWEEN :dataI AND :dataF ORDER BY p.idPedido DESC";
 		TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
 		typedQuery.setParameter("idCliente", idCliente);
+		typedQuery.setParameter("dataI", dataInicio);
+		typedQuery.setParameter("dataF", dataFim);
 		try {
 			pedidosAux = typedQuery.getResultList();
 		} catch(NoResultException e) {
@@ -121,7 +124,7 @@ public class PedidoService {
 	 */
 	public List<PedidoData> listarPedidosData(Date dataInicio, Date dataFim){
 		List<Pedido> pedidosAux = null;
-		String jpql = "select p from Pedido p where p.dataPedido BETWEEN :dataI AND :dataF";
+		String jpql = "select p from Pedido p where p.dataPedido BETWEEN :dataI AND :dataF ORDER BY p.idPedido DESC";
 		TypedQuery<Pedido> typedQuery = entityManager.createQuery(jpql, Pedido.class);
 		typedQuery.setParameter("dataI", dataInicio);
 		typedQuery.setParameter("dataF", dataFim);
@@ -241,8 +244,7 @@ public class PedidoService {
 			
 			//Atualizando o valor total do pedido
 			Pedido pedido = entityManager.find(Pedido.class, item.getPk().getPedido().getIdPedido());
-			Produto produto = entityManager.find(Produto.class, item.getPk().getProduto().getIdProduto());
-			pedido.setValorTotal(pedido.getValorTotal() - (produto.getPreco() * item.getQuantidade()));
+			pedido.setValorTotal(pedido.getValorTotal() - (item.getPreco() * item.getQuantidade()));
 			entityManager.merge(pedido);
 			entityManager.getTransaction().commit();
 			

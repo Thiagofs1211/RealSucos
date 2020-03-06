@@ -14,5 +14,7 @@ public class ItemPedido {
 	@EmbeddedId
 	private ItemPedidoPK pk;
 	
-	private int quantidade;
+	private float quantidade;
+	
+	private float preco;
 }
