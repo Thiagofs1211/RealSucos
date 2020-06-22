@@ -111,7 +111,7 @@ public class ClienteService {
 		entityManager.getTransaction().commit();
 		
 		//Verificar se o cliente foi inserido corretamente
-		return procurarClienteNome(cliente.getNome());
+		return procurarCliente(cliente.getIdCliente());
 	}
 	
 	/**

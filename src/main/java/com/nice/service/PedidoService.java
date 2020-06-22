@@ -15,7 +15,6 @@ import org.springframework.stereotype.Service;
 import com.nice.model.ItemPedido;
 import com.nice.model.Pedido;
 import com.nice.model.PedidoData;
-import com.nice.model.Produto;
 
 @Service
 public class PedidoService {

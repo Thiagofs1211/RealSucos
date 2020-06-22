@@ -7,21 +7,25 @@ import javax.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.nice.model.Produto;
 import com.nice.service.ProdutoService;
 
 @RestController
+@RequestMapping("/produtos")
 public class ProdutoController {
 
 	ProdutoService service = new ProdutoService();
 	
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/produtos", method = RequestMethod.GET)
+	@GetMapping()
 	public ResponseEntity<List<Produto>> listarProdutos(){
 		List<Produto> produtos = service.listarProdutos();
 		
@@ -33,7 +37,7 @@ public class ProdutoController {
 	}
 	
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/produtos/comercio", method = RequestMethod.GET)
+	@GetMapping("/comercio")
 	public ResponseEntity<List<Produto>> listarProdutosComercio(){
 		List<Produto> produtos = service.listarProdutosComercio();
 		
@@ -45,7 +49,7 @@ public class ProdutoController {
 	}
 	
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/produtos/avulso", method = RequestMethod.GET)
+	@GetMapping("/avulso")
 	public ResponseEntity<List<Produto>> listarProdutosAvulso(){
 		List<Produto> produtos = service.listarProdutosAvulsos();
 		
@@ -57,7 +61,7 @@ public class ProdutoController {
 	}
 	
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/produtos/cadastrar", method = RequestMethod.POST)
+	@PostMapping("/cadastrar")
 	public ResponseEntity<Object> criarProduto(@Valid @RequestBody Produto produto){
 		service.cadastrarProduto(produto);
 		
@@ -65,7 +69,7 @@ public class ProdutoController {
 	}
 	
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/produtos/excluir", method = RequestMethod.DELETE)
+	@DeleteMapping("/excluir")
 	public ResponseEntity<Object> excluirProduto(@Valid @RequestBody Produto produto){
 		Produto oldProduto = service.procurarProduto(produto.getIdProduto());
 		
@@ -78,7 +82,7 @@ public class ProdutoController {
 	}
 	
 	@CrossOrigin(origins = "*")
-	@RequestMapping(value = "/produtos/alterar", method = RequestMethod.PUT)
+	@PutMapping("/alterar")
 	public ResponseEntity<Object> alterarProduto(@Valid @RequestBody Produto produto){
 		Produto oldProduto = service.procurarProduto(produto.getIdProduto());
 		
