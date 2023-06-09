@@ -29,7 +29,7 @@ public class PedidoService {
 	
 	public void inserirPedido(List<ItemPedido> itensPedido, Pedido pedido) {
 		pedido.setIdPedido(recuperarProximoPedidoId());
-		pedido.setDataPedido(new Date());
+		//pedido.setDataPedido(new Date());
 		
 		//Inserindo o pedido
 		entityManager.getTransaction().begin();
